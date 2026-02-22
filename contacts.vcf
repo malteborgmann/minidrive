@@ -1,0 +1,91 @@
+BEGIN:VCARD
+VERSION:4.0
+KIND:individual
+N:Sager;Armin;;;
+FN:Armin Sager
+EMAIL;TYPE=home:kjunk@example.net
+TEL;VALUE=uri;TYPE=home:tel:0859310824
+ADR;TYPE=home:;;Sylvia-Scheel-Allee 89/97;Koblenz;;46098;Germany
+REV:20260212T022708Z
+END:VCARDBEGIN:VCARD
+VERSION:4.0
+KIND:individual
+N:Börner;Luigi;;;
+FN:Luigi Börner
+EMAIL;TYPE=home:fweiss@example.com
+TEL;VALUE=uri;TYPE=home:tel:+49(0)4831477935
+ADR;TYPE=home:;;Pirmin-Grein Groth-Gasse 4193;Schmölln;;66117;Germany
+REV:20260216T015752Z
+END:VCARDBEGIN:VCARD
+VERSION:4.0
+KIND:individual
+N:Mielcarek;Irena;;;
+FN:Irena Mielcarek
+EMAIL;TYPE=home:fiebigorhan@example.com
+TEL;VALUE=uri;TYPE=home:tel:+49(0)3720743059
+ADR;TYPE=home:;;Slavica-Tlustek-Weg 7630;Sternberg;;70048;Germany
+REV:20260221T085900Z
+END:VCARDBEGIN:VCARD
+VERSION:4.0
+KIND:individual
+N:Wilmsen;Marie-Therese;;;
+FN:Marie-Therese Wilmsen
+EMAIL;TYPE=home:michaelabien@example.org
+TEL;VALUE=uri;TYPE=home:tel:+49(0)7576998365
+ADR;TYPE=home:;;Losekannweg 448;Stadtroda;;35293;Germany
+REV:20260122T203454Z
+END:VCARDBEGIN:VCARD
+VERSION:4.0
+KIND:individual
+N:Hertrampf;Xaver;;;
+FN:Xaver Hertrampf
+EMAIL;TYPE=home:qkraus@example.org
+TEL;VALUE=uri;TYPE=home:tel:0079663838
+ADR;TYPE=home:;;Karl-Peter-Misicher-Allee 3175;Neunburg vorm Wald;;71783;Germany
+REV:20260101T220032Z
+END:VCARDBEGIN:VCARD
+VERSION:4.0
+KIND:individual
+N:Weitzel;Justus;;;
+FN:Justus Weitzel
+EMAIL;TYPE=home:rosemanngabor@example.net
+TEL;VALUE=uri;TYPE=home:tel:(09134)95472
+ADR;TYPE=home:;;Heinrichstraße 3/9;Wetzlar;;25621;Germany
+REV:20260221T063015Z
+END:VCARDBEGIN:VCARD
+VERSION:4.0
+KIND:individual
+N:Kensy;Emmi;;;
+FN:Emmi Kensy
+EMAIL;TYPE=home:uschenk@example.net
+TEL;VALUE=uri;TYPE=home:tel:05823960145
+ADR;TYPE=home:;;Scheuermanngasse 3;Altötting;;88865;Germany
+REV:20260131T190354Z
+END:VCARDBEGIN:VCARD
+VERSION:4.0
+KIND:individual
+N:Wagenknecht;Florence;;;
+FN:Florence Wagenknecht
+EMAIL;TYPE=home:manschristel@example.net
+TEL;VALUE=uri;TYPE=home:tel:0545994488
+ADR;TYPE=home:;;Franz Josef-Beier-Platz 125;Weimar;;81559;Germany
+REV:20260127T082619Z
+END:VCARDBEGIN:VCARD
+VERSION:4.0
+KIND:individual
+N:Gutknecht;Bodo;;;
+FN:Bodo Gutknecht
+EMAIL;TYPE=home:alischinke@example.org
+TEL;VALUE=uri;TYPE=home:tel:+49(0)8312626246
+ADR;TYPE=home:;;Mohamed-Spieß-Platz 1;Borna;;32112;Germany
+REV:20260128T135523Z
+END:VCARDBEGIN:VCARD
+VERSION:4.0
+KIND:individual
+N:Schwital;Eveline;;;
+FN:Eveline Schwital
+EMAIL;TYPE=home:hans-willihuebel@example.com
+TEL;VALUE=uri;TYPE=home:tel:+49(0)2673656470
+ADR;TYPE=home:;;Möchlichengasse 22;Bremervörde;;57349;Germany
+REV:20260129T114932Z
+END:VCARD

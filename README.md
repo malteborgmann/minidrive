@@ -49,6 +49,9 @@ Aufgaben:
 - [x] GitHub Repository erstellen
 - [ ] GitHub Repository verlinken
 
+
+Server Side Pagination scheint am sinnvollsten, da die Anzahl der Kontakte potenziell sehr groß werden kann.
+
 ## Anforderungen:
 
 ```
