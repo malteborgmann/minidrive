@@ -9,29 +9,27 @@ def generate_vcf(n, filename="contacts.vcf"):
             last_name = fake.last_name()
             phone = fake.phone_number()
             email = fake.email()
-            street = fake.street_address()
+            street = fake.street_name()
+            number = fake.building_number()
             city = fake.city()
             zip_code = fake.postcode()
-            
-            
+
             # Demo: https://de.wikipedia.org/wiki/VCard#vCard_4.0
+            # Using vCard 3.0 Format
+            # Apple Contacts App uses vCard 3.0 Format as well as Google Contacts App. 
 
             vcard = [
                 "BEGIN:VCARD",
-                "VERSION:4.0",
-                f"KIND:individual",
+                "VERSION:3.0",
                 f"N:{last_name};{first_name};;;",
                 f"FN:{first_name} {last_name}",
-                f"EMAIL;TYPE=home:{email}",
-                f"TEL;VALUE=uri;TYPE=home:tel:{phone.replace(' ', '')}",
-                f"ADR;TYPE=home:;;{street};{city};;{zip_code};Germany",
-                f"REV:{fake.date_time_this_year().strftime('%Y%m%dT%H%M%SZ')}",
+                f"EMAIL;TYPE=INTERNET,HOME:{email}",
+                f"TEL;TYPE=CELL,VOICE:{phone}",
+                f"ADR;TYPE=HOME:;;{street} {number};{city};;{zip_code};Germany",
                 "END:VCARD",
+                "" 
             ]
-            
             f.write("\n".join(vcard))
-    
     print(f"Erfolgreich {n} Kontakte in {filename} erstellt.")
 
-# Beispielaufruf für 10 Kontakte
-generate_vcf(10)
+generate_vcf(1)
