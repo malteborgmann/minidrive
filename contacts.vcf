@@ -1,8 +1,0 @@
-BEGIN:VCARD
-VERSION:3.0
-N:Drewes;Jiri;;;
-FN:Jiri Drewes
-EMAIL;TYPE=INTERNET,HOME:jwilms@example.net
-TEL;TYPE=CELL,VOICE:07409 37541
-ADR;TYPE=HOME:;;Hartwig-Beyer-Gasse 96, 39349 Gräfenhainichen;;;;
-END:VCARD
