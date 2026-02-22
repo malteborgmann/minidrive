@@ -28,7 +28,7 @@ Entscheidung:
 - Ich werde das ganze als Kontaktverwaltung umsetzen. Ist das für sie okay, Jonathan?
 
 Aufgaben:
-- [ ] Dummy VCF-Dateien erstellen
+- [x] Dummy VCF-Dateien erstellen
 - [ ] Backend Endpunkte definieren
 - [ ] Backend implementieren
     - [ ] Add Contact by ID
@@ -48,6 +48,9 @@ Aufgaben:
 - [ ] Docker Compose implementieren
 - [x] GitHub Repository erstellen
 - [ ] GitHub Repository verlinken
+
+
+Server Side Pagination scheint am sinnvollsten, da die Anzahl der Kontakte potenziell sehr groß werden kann.
 
 ## Anforderungen:
 
