@@ -14,7 +14,7 @@ def generate_vcf(n, filename="contacts.vcf"):
             city = fake.city()
             zip_code = fake.postcode()
 
-            # Demo: https://de.wikipedia.org/wiki/VCard#vCard_4.0
+            # Demo: https://de.wikipedia.org/wiki/VCard#vCard_3.0
             # Using vCard 3.0 Format
             # Apple Contacts App uses vCard 3.0 Format as well as Google Contacts App. 
 
