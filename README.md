@@ -28,7 +28,7 @@ Entscheidung:
 - Ich werde das ganze als Kontaktverwaltung umsetzen. Ist das für sie okay, Jonathan?
 
 Aufgaben:
-- [ ] Dummy VCF-Dateien erstellen
+- [x] Dummy VCF-Dateien erstellen
 - [ ] Backend Endpunkte definieren
 - [ ] Backend implementieren
     - [ ] Add Contact by ID
