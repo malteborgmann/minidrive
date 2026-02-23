@@ -1,20 +1,25 @@
-from pydantic import BaseModel, ConfigDict
-from typing import Optional, List
 from datetime import datetime
+from typing import List, Optional
+
+from pydantic import BaseModel, ConfigDict
+
 
 class CommunicationBase(BaseModel):
     comm_type: str
     label: Optional[str] = None
     value: str
 
+
 class CommunicationCreate(CommunicationBase):
     pass
+
 
 class Communication(CommunicationBase):
     id: int
     contact_id: int
 
     model_config = ConfigDict(from_attributes=True)
+
 
 class ContactBase(BaseModel):
     first_name: Optional[str] = None
@@ -23,11 +28,14 @@ class ContactBase(BaseModel):
     notes: Optional[str] = None
     address: Optional[str] = None
 
+
 class ContactCreate(ContactBase):
     communications: Optional[List[CommunicationCreate]] = []
 
+
 class ContactUpdate(ContactBase):
     communications: Optional[List[CommunicationCreate]] = []
+
 
 class ContactResponse(ContactBase):
     id: int
