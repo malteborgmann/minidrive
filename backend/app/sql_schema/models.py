@@ -1,4 +1,3 @@
-from app.database import Base
 from sqlalchemy import (
     CheckConstraint,
     Column,
@@ -9,6 +8,22 @@ from sqlalchemy import (
     Text,
 )
 from sqlalchemy.orm import relationship
+
+from app.database import Base
+
+
+class User(Base):
+    """User for the application"""
+
+    __tablename__ = "users"
+
+    id = Column(Integer, primary_key=True, index=True)
+    username = Column(String, unique=True, index=True, nullable=False)
+    hashed_password = Column(String, nullable=False)
+
+    contacts = relationship(
+        "Contact", back_populates="owner", cascade="all, delete-orphan"
+    )
 
 
 class Contact(Base):
@@ -25,6 +40,9 @@ class Contact(Base):
     # Metadata
     modified = Column(DateTime, nullable=True)
     created = Column(DateTime, nullable=True)
+
+    owner_id = Column(Integer, ForeignKey("users.id"))
+    owner = relationship("User", back_populates="contacts")
 
     # Either Name, Last Name or Company must be set.
     # Constraint is checked by the database. Advantage if backend makes mistake :)
