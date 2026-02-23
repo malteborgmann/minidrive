@@ -1,4 +1,5 @@
 from datetime import datetime, timezone
+from typing import List
 
 from sqlalchemy.orm import Session
 
@@ -108,3 +109,44 @@ def delete_contact(db: Session, contact_id: int, user_id: int):
         db.delete(db_contact)
         db.commit()
     return db_contact
+
+
+def create_contacts_from_vcard(
+    db: Session, contacts: List[schema.ContactCreate], user_id: int
+):
+    created_contacts = []
+    try:
+        for contact in contacts:
+            now = datetime.now(timezone.utc)
+            db_contact = models.Contact(
+                first_name=contact.first_name,
+                last_name=contact.last_name,
+                company=contact.company,
+                notes=contact.notes,
+                address=contact.address,
+                created=now,
+                modified=now,
+                owner_id=user_id,
+            )
+            db.add(db_contact)
+            db.commit()
+            db.refresh(db_contact)
+
+            if contact.communications:
+                for comm in contact.communications:
+                    db_comm = models.Communication(
+                        contact_id=db_contact.id,
+                        comm_type=comm.comm_type,
+                        label=comm.label,
+                        value=comm.value,
+                    )
+                    db.add(db_comm)
+
+            created_contacts.append(db_contact)
+    except Exception:
+        raise RuntimeError("Error creating contacts")
+
+    db.commit()
+    db.refresh(db_contact)
+
+    return created_contacts

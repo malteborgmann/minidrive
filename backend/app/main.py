@@ -1,4 +1,3 @@
-import os
 from datetime import timedelta
 from typing import List
 
@@ -15,6 +14,7 @@ from app.auth import (
     verify_password,
 )
 from app.database import SessionLocal, engine
+from app.parser.vCardParser import parse_vcards
 from app.pydantic_schema import schema
 from app.sql_schema import models
 
@@ -120,29 +120,40 @@ def delete_contact_by_id(
 
 # https://fastapi.tiangolo.com/tutorial/request-files/#define-file-parameters
 @app.post("/files/")
-async def upload_file(file: UploadFile = File(...)):
-    # Erst einmal nur lokal im Endpunkt verarbeiten, wie gewünscht
-
+async def upload_file(
+    file: UploadFile = File(...),
+    current_user: models.User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
     if file.content_type != "text/vcard":
         raise HTTPException(status_code=400, detail="File must be VCF")
 
     try:
         content = await file.read()
         vcard = vobject.readOne(content.decode("utf-8"))
-        print(vcard.validate())
+        vcard.validate()
     except Exception:
         raise HTTPException(status_code=400, detail="File is not a valid VCF")
 
-    upload_dir = "tmp/uploads"
-    os.makedirs(upload_dir, exist_ok=True)
+    contacts = parse_vcards(content.decode("utf-8"))
 
-    file_path = os.path.join(upload_dir, file.filename)
-    with open(file_path, "wb") as buffer:
-        buffer.write(content)
+    try:
+        created_contacts = crud.create_contacts_from_vcard(
+            db, contacts, current_user.id
+        )
+    except Exception:
+        raise HTTPException(status_code=400, detail="Error creating contacts")
+
+    #    upload_dir = "tmp/uploads/" + current_user.username
+    #    os.makedirs(upload_dir, exist_ok=True)
+
+    #    file_path = os.path.join(upload_dir, file.filename)
+    #    with open(file_path, "wb") as buffer:
+    #        buffer.write(content)
 
     return {
         "filename": file.filename,
-        "status": "uploaded",
-        "saved_path": file_path,
-        "size_bytes": len(content),
+        "status": "success",
+        "contacts_imported": len(created_contacts),
+        "contacts": created_contacts,
     }
