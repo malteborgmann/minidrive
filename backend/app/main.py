@@ -1,7 +1,8 @@
 from datetime import timedelta
 from typing import List
 
-from fastapi import Depends, FastAPI, HTTPException, status
+import vobject
+from fastapi import Depends, FastAPI, File, HTTPException, UploadFile, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 
@@ -13,6 +14,7 @@ from app.auth import (
     verify_password,
 )
 from app.database import SessionLocal, engine
+from app.parser.vCardParser import parse_vcards
 from app.pydantic_schema import schema
 from app.sql_schema import models
 
@@ -55,11 +57,6 @@ def login_for_access_token(
         data={"sub": user.username}, expires_delta=access_token_expires
     )
     return {"access_token": access_token, "token_type": "bearer"}
-
-
-@app.get("/")
-def read_root():
-    return {"message": "Welcome to Minidrive Contacts"}
 
 
 @app.post("/contacts/", response_model=schema.ContactResponse)
@@ -119,3 +116,44 @@ def delete_contact_by_id(
     if db_contact is None:
         raise HTTPException(status_code=404, detail="Contact not found")
     return db_contact
+
+
+# https://fastapi.tiangolo.com/tutorial/request-files/#define-file-parameters
+@app.post("/files/")
+async def upload_file(
+    file: UploadFile = File(...),
+    current_user: models.User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    if file.content_type != "text/vcard":
+        raise HTTPException(status_code=400, detail="File must be VCF")
+
+    try:
+        content = await file.read()
+        vcard = vobject.readOne(content.decode("utf-8"))
+        vcard.validate()
+    except Exception:
+        raise HTTPException(status_code=400, detail="File is not a valid VCF")
+
+    contacts = parse_vcards(content.decode("utf-8"))
+
+    try:
+        created_contacts = crud.create_contacts_from_vcard(
+            db, contacts, current_user.id
+        )
+    except Exception:
+        raise HTTPException(status_code=400, detail="Error creating contacts")
+
+    #    upload_dir = "tmp/uploads/" + current_user.username
+    #    os.makedirs(upload_dir, exist_ok=True)
+
+    #    file_path = os.path.join(upload_dir, file.filename)
+    #    with open(file_path, "wb") as buffer:
+    #        buffer.write(content)
+
+    return {
+        "filename": file.filename,
+        "status": "success",
+        "contacts_imported": len(created_contacts),
+        "contacts": created_contacts,
+    }

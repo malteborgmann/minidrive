@@ -1,4 +1,5 @@
 from datetime import datetime, timezone
+from typing import List
 
 from sqlalchemy.orm import Session
 
@@ -108,3 +109,49 @@ def delete_contact(db: Session, contact_id: int, user_id: int):
         db.delete(db_contact)
         db.commit()
     return db_contact
+
+
+def create_contacts_from_vcard(
+    db: Session, contacts: List[schema.ContactCreate], user_id: int
+):
+    created_contacts = []
+    try:
+        for contact in contacts:
+            now = datetime.now(timezone.utc)
+            db_contact = models.Contact(
+                first_name=contact.first_name,
+                last_name=contact.last_name,
+                company=contact.company,
+                notes=contact.notes,
+                address=contact.address,
+                created=now,
+                modified=now,
+                owner_id=user_id,
+            )
+
+            if contact.communications:
+                for comm in contact.communications:
+                    db_comm = models.Communication(
+                        comm_type=comm.comm_type,
+                        label=comm.label,
+                        value=comm.value,
+                    )
+                    # Über die SQLAlchemy-Relation verknüpfen
+                    # Dieser Weg ist schöner für die Ausgabe nach dem einfügen
+                    db_contact.communications.append(db_comm)
+
+            db.add(db_contact)
+            created_contacts.append(db_contact)
+
+        db.commit()
+
+        result = []
+        for c in created_contacts:
+            db.refresh(c)
+            c_dict = schema.ContactResponse.model_validate(c).model_dump()
+            result.append(c_dict)
+
+        return result
+    except Exception as e:
+        db.rollback()  # Rollback bei Fehler -> Keine halben Kontaktlisten einfügen
+        raise RuntimeError(f"Error creating contacts: {e}")
