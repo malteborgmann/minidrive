@@ -23,7 +23,7 @@
           <h1>Your Contacts</h1>
           <p>Manage and view all your synchronized data.</p>
         </div>
-        <button class="primary-btn" @click="alert('VCF Upload not yet implemented in frontend')">
+        <button class="primary-btn" @click="showUpload = true">
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" class="btn-icon" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
           Import VCF
         </button>
@@ -40,6 +40,13 @@
       
       <ContactTable v-else :contacts="contacts" />
     </main>
+
+    <!-- Upload Modal -->
+    <UploadModal
+      :visible="showUpload"
+      @close="showUpload = false"
+      @uploaded="onUploaded"
+    />
   </div>
 </template>
 
@@ -48,17 +55,18 @@ import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import api from '../services/api';
 import ContactTable from '../components/ContactTable.vue';
+import UploadModal from '../components/UploadModal.vue';
 
 const router = useRouter();
 const contacts = ref([]);
 const isLoading = ref(true);
 const errorMsg = ref('');
+const showUpload = ref(false);
 
 const fetchContacts = async () => {
   try {
     const response = await api.get('/contacts/');
     contacts.value = response.data;
-    console.log(contacts.value);
   } catch (error) {
     if (error.response && error.response.status === 401) {
       errorMsg.value = 'Your session has expired. Please log in again.';
@@ -69,6 +77,10 @@ const fetchContacts = async () => {
   } finally {
     isLoading.value = false;
   }
+};
+
+const onUploaded = () => {
+  fetchContacts(); // Refresh the table after successful upload
 };
 
 const logout = () => {
