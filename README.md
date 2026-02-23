@@ -36,17 +36,12 @@ Aufgaben:
     - [x] Update Contact by ID
     - [x] Delete Contact by ID
     - [x] Add Contacts from VCF
-    - [] Search Contacts by Name -> Return IDs
-- [ ] Frontend implementieren
-    - [ ] Upload Button
-    - [ ] Tabellarische Übersicht
-    - [ ] Kontaktfenster bauen (Name, Nachname, Telefon, E-Mail, Adresse (ggf. darstellung mit OpenStreetMap))
-    - [ ] Suchfeld
-    - [ ] Button zum Hinzufügen eines Kontaktes
-    - [ ] Button zum Bearbeiten eines Kontaktes
-    - [ ] Button zum Löschen eines Kontaktes
-- [ ] Docker implementieren
-- [ ] Docker Compose implementieren
+- [x] Frontend implementieren
+    - [x] Upload Button
+    - [x] Tabellarische Übersicht
+    - [x] Kontaktfenster
+- [x] Docker implementieren
+- [x] Docker Compose implementieren
 - [x] GitHub Repository erstellen
 - [x] GitHub Repository verlinken
 

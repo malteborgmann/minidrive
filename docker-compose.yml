@@ -1,0 +1,29 @@
+services:
+  backend:
+    build:
+      context: ./backend
+    container_name: minidrive-backend
+    volumes:
+      - db-data:/app
+    networks:
+      - minidrive-net
+    expose:
+      - "8000"
+
+  frontend:
+    build:
+      context: ./frontend/vueapp
+    container_name: minidrive-frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+    networks:
+      - minidrive-net
+
+networks:
+  minidrive-net:
+    driver: bridge
+
+volumes:
+  db-data:
