@@ -29,13 +29,14 @@ Entscheidung:
 
 Aufgaben:
 - [x] Dummy VCF-Dateien erstellen
-- [ ] Backend Endpunkte definieren
-- [ ] Backend implementieren
-    - [ ] Add Contact by ID
-    - [ ] Get Contact by ID
-    - [ ] Update Contact by ID
-    - [ ] Delete Contact by ID
-    - [ ] Search Contacts by Name -> Return IDs
+- [x] Backend Endpunkte definieren
+- [x] Backend implementieren
+    - [x] Add Contact
+    - [x] Get Contact by ID
+    - [x] Update Contact by ID
+    - [x] Delete Contact by ID
+    - [x] Add Contacts from VCF
+    - [] Search Contacts by Name -> Return IDs
 - [ ] Frontend implementieren
     - [ ] Upload Button
     - [ ] Tabellarische Übersicht
@@ -47,7 +48,7 @@ Aufgaben:
 - [ ] Docker implementieren
 - [ ] Docker Compose implementieren
 - [x] GitHub Repository erstellen
-- [ ] GitHub Repository verlinken
+- [x] GitHub Repository verlinken
 
 
 Server Side Pagination scheint am sinnvollsten, da die Anzahl der Kontakte potenziell sehr groß werden kann.
