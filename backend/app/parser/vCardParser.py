@@ -82,11 +82,44 @@ def parse_vcards(vcf_content: str) -> List[schema.ContactCreate]:
 if __name__ == "__main__":
     content = """BEGIN:VCARD
 VERSION:3.0
-N:Rogge;Martine;;;
-FN:Martine Rogge
-EMAIL;TYPE=INTERNET,HOME:adelinde95@example.org
-TEL;TYPE=CELL,VOICE:06605 54127
-ADR;TYPE=HOME:;;Hatice-Jäntsch-Ring 3180;Vilsbiburg;;02406;Germany
-END:VCARD"""
+N:Rust;Edwin;;;
+FN:Edwin Rust
+EMAIL;TYPE=INTERNET,HOME:kdrewes@example.org
+TEL;TYPE=CELL,VOICE:+49(0)1966840149
+ADR;TYPE=HOME:;;Klaas-Stumpf-Allee 9823;Biedenkopf;;66776;Germany
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+N:Gutknecht;Antonios;;;
+FN:Antonios Gutknecht
+EMAIL;TYPE=INTERNET,HOME:marvinwerner@example.org
+TEL;TYPE=CELL,VOICE:08266 14304
+ADR;TYPE=HOME:;;Stiebitzstr. 95;Grevenbroich;;10194;Germany
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+N:Heintze;Volkhard;;;
+FN:Volkhard Heintze
+EMAIL;TYPE=INTERNET,HOME:pruschketilman@example.com
+TEL;TYPE=CELL,VOICE:06077047581
+ADR;TYPE=HOME:;;Cäcilie-Dörschner-Ring 9-9;Hünfeld;;22720;Germany
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+N:Kusch;Apollonia;;;
+FN:Apollonia Kusch
+EMAIL;TYPE=INTERNET,HOME:yjunitz@example.com
+TEL;TYPE=CELL,VOICE:(05435) 151626
+ADR;TYPE=HOME:;;Tlustekring 595;Ahaus;;68909;Germany
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+N:Peukert;Halil;;;
+FN:Halil Peukert
+EMAIL;TYPE=INTERNET,HOME:gerlachgino@example.com
+TEL;TYPE=CELL,VOICE:+49(0)0261 207042
+ADR;TYPE=HOME:;;Birgitta-Dowerg-Weg 86/51;Lüneburg;;94770;Germany
+END:VCARD
+"""
 
-    print(parse_vcards(content))
+    print(parse_vcards(content)[1].model_dump())
