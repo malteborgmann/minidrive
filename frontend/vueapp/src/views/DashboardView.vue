@@ -38,7 +38,7 @@
         {{ errorMsg }}
       </div>
       
-      <ContactTable v-else :contacts="contacts" />
+      <ContactTable v-else :contacts="contacts" @row-click="openContactModal" />
     </main>
 
     <!-- Upload Modal -->
@@ -46,6 +46,15 @@
       :visible="showUpload"
       @close="showUpload = false"
       @uploaded="onUploaded"
+    />
+
+    <!-- Contact Details & Edit Modal -->
+    <ContactModal
+      :visible="showContactModal"
+      :contact="selectedContact"
+      @close="showContactModal = false"
+      @updated="onContactUpdated"
+      @deleted="onContactDeleted"
     />
   </div>
 </template>
@@ -56,12 +65,15 @@ import { useRouter } from 'vue-router';
 import api from '../services/api';
 import ContactTable from '../components/ContactTable.vue';
 import UploadModal from '../components/UploadModal.vue';
+import ContactModal from '../components/ContactModal.vue';
 
 const router = useRouter();
 const contacts = ref([]);
 const isLoading = ref(true);
 const errorMsg = ref('');
 const showUpload = ref(false);
+const showContactModal = ref(false);
+const selectedContact = ref(null);
 
 const fetchContacts = async () => {
   try {
@@ -81,6 +93,29 @@ const fetchContacts = async () => {
 
 const onUploaded = () => {
   fetchContacts(); // Refresh the table after successful upload
+};
+
+const openContactModal = (contact) => {
+  selectedContact.value = contact;
+  showContactModal.value = true;
+};
+
+const onContactUpdated = async () => {
+  await fetchContacts(); // Refresh list to get new data
+  
+  // Re-link the selected contact to the freshly fetched copy to instantly reflect changes
+  if (selectedContact.value) {
+    const updated = contacts.value.find(c => c.id === selectedContact.value.id);
+    if (updated) {
+      selectedContact.value = updated;
+    }
+  }
+};
+
+const onContactDeleted = async () => {
+  showContactModal.value = false;
+  selectedContact.value = null;
+  await fetchContacts(); // Refresh list to remove deleted item
 };
 
 const logout = () => {
