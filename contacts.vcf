@@ -1,0 +1,40 @@
+BEGIN:VCARD
+VERSION:3.0
+N:Trüb;Margrit;;;
+FN:Margrit Trüb
+EMAIL;TYPE=INTERNET,HOME:karen10@example.com
+TEL;TYPE=CELL,VOICE:05833 466444
+ADR;TYPE=HOME:;;Dorit-Drub-Ring 62-93;Siegen;;59926;Germany
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+N:Stadelmann;Kreszenz;;;
+FN:Kreszenz Stadelmann
+EMAIL;TYPE=INTERNET,HOME:annegretweller@example.net
+TEL;TYPE=CELL,VOICE:+49(0)1755740840
+ADR;TYPE=HOME:;;Werneckegasse 97;Wesel;;60056;Germany
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+N:Juncken;Ibrahim;;;
+FN:Ibrahim Juncken
+EMAIL;TYPE=INTERNET,HOME:ybien@example.com
+TEL;TYPE=CELL,VOICE:(09706) 608370
+ADR;TYPE=HOME:;;Wernerweg 6252;Nürtingen;;90796;Germany
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+N:Dietz;Rosmarie;;;
+FN:Rosmarie Dietz
+EMAIL;TYPE=INTERNET,HOME:irmtrud38@example.com
+TEL;TYPE=CELL,VOICE:+49(0)8913939310
+ADR;TYPE=HOME:;;Schottingasse 7614;Biedenkopf;;84441;Germany
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+N:Trapp;Conny;;;
+FN:Conny Trapp
+EMAIL;TYPE=INTERNET,HOME:theodoros43@example.org
+TEL;TYPE=CELL,VOICE:(06970) 96069
+ADR;TYPE=HOME:;;Cichoriusallee 99/49;Griesbach Rottal;;01361;Germany
+END:VCARD
