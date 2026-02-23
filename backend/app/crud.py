@@ -1,19 +1,44 @@
 from datetime import datetime, timezone
 
-from app.pydantic_schema import schema
-from app.sql_schema import models
 from sqlalchemy.orm import Session
 
-
-def get_contact(db: Session, contact_id: int):
-    return db.query(models.Contact).filter(models.Contact.id == contact_id).first()
-
-
-def get_contacts(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.Contact).offset(skip).limit(limit).all()
+from app.auth import get_password_hash
+from app.pydantic_schema import schema
+from app.sql_schema import models
 
 
-def create_contact(db: Session, contact: schema.ContactCreate):
+def get_user_by_username(db: Session, username: str):
+    return db.query(models.User).filter(models.User.username == username).first()
+
+
+def create_user(db: Session, user: schema.UserCreate):
+    hashed_password = get_password_hash(user.password)
+    db_user = models.User(username=user.username, hashed_password=hashed_password)
+    db.add(db_user)
+    db.commit()
+    db.refresh(db_user)
+    return db_user
+
+
+def get_contact(db: Session, contact_id: int, user_id: int):
+    return (
+        db.query(models.Contact)
+        .filter(models.Contact.id == contact_id, models.Contact.owner_id == user_id)
+        .first()
+    )
+
+
+def get_contacts(db: Session, user_id: int, skip: int = 0, limit: int = 100):
+    return (
+        db.query(models.Contact)
+        .filter(models.Contact.owner_id == user_id)
+        .offset(skip)
+        .limit(limit)
+        .all()
+    )
+
+
+def create_contact(db: Session, contact: schema.ContactCreate, user_id: int):
     now = datetime.now(timezone.utc)
     db_contact = models.Contact(
         first_name=contact.first_name,
@@ -23,6 +48,7 @@ def create_contact(db: Session, contact: schema.ContactCreate):
         address=contact.address,
         created=now,
         modified=now,
+        owner_id=user_id,
     )
     db.add(db_contact)
     db.commit()
@@ -43,15 +69,14 @@ def create_contact(db: Session, contact: schema.ContactCreate):
     return db_contact
 
 
-def update_contact(db: Session, contact_id: int, contact: schema.ContactUpdate):
-    db_contact = get_contact(db, contact_id=contact_id)
+def update_contact(
+    db: Session, contact_id: int, contact: schema.ContactUpdate, user_id: int
+):
+    db_contact = get_contact(db, contact_id=contact_id, user_id=user_id)
     if not db_contact:
         return None
 
     update_data = contact.model_dump(exclude_unset=True, exclude={"communications"})
-
-    # TODO: Implement update logic for communication
-    # Communication will be handled separately. For now it's just a list.
 
     for key, value in update_data.items():
         setattr(db_contact, key, value)
@@ -77,8 +102,8 @@ def update_contact(db: Session, contact_id: int, contact: schema.ContactUpdate):
     return db_contact
 
 
-def delete_contact(db: Session, contact_id: int):
-    db_contact = get_contact(db, contact_id=contact_id)
+def delete_contact(db: Session, contact_id: int, user_id: int):
+    db_contact = get_contact(db, contact_id=contact_id, user_id=user_id)
     if db_contact:
         db.delete(db_contact)
         db.commit()
