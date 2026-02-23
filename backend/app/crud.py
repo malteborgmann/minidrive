@@ -128,24 +128,30 @@ def create_contacts_from_vcard(
                 modified=now,
                 owner_id=user_id,
             )
-            db.add(db_contact)
-            db.flush()  # Holt die ID ohne es schon zu committen
 
             if contact.communications:
                 for comm in contact.communications:
                     db_comm = models.Communication(
-                        contact_id=db_contact.id,
                         comm_type=comm.comm_type,
                         label=comm.label,
                         value=comm.value,
                     )
-                    db.add(db_comm)
+                    # Über die SQLAlchemy-Relation verknüpfen
+                    # Dieser Weg ist schöner für die Ausgabe nach dem einfügen
+                    db_contact.communications.append(db_comm)
 
-            created_contacts.append(contact.model_dump())
+            db.add(db_contact)
+            created_contacts.append(db_contact)
 
         db.commit()
-    except Exception as e:
-        db.rollback()
-        raise RuntimeError(f"Error creating contacts: {e}")
 
-    return created_contacts
+        result = []
+        for c in created_contacts:
+            db.refresh(c)
+            c_dict = schema.ContactResponse.model_validate(c).model_dump()
+            result.append(c_dict)
+
+        return result
+    except Exception as e:
+        db.rollback()  # Rollback bei Fehler -> Keine halben Kontaktlisten einfügen
+        raise RuntimeError(f"Error creating contacts: {e}")
