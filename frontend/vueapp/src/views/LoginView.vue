@@ -194,6 +194,7 @@ const handleLogin = async () => {
   font-weight: 700;
   margin-bottom: 8px;
   background: linear-gradient(to right, #fff, #cbd5e1);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
