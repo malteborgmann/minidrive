@@ -3,6 +3,7 @@ from typing import List
 
 import vobject
 from fastapi import Depends, FastAPI, File, HTTPException, UploadFile, status
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 
@@ -21,6 +22,17 @@ from app.sql_schema import models
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Minidrive Contacts API")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5173",
+        "http://localhost:5174",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 # Dependency
@@ -106,7 +118,7 @@ def update_contact_by_id(
     return db_contact
 
 
-@app.delete("/contacts/{contact_id}", response_model=schema.ContactResponse)
+@app.delete("/contacts/{contact_id}")
 def delete_contact_by_id(
     contact_id: int,
     db: Session = Depends(get_db),
@@ -115,7 +127,7 @@ def delete_contact_by_id(
     db_contact = crud.delete_contact(db, contact_id=contact_id, user_id=current_user.id)
     if db_contact is None:
         raise HTTPException(status_code=404, detail="Contact not found")
-    return db_contact
+    return {"detail": "Contact deleted successfully"}
 
 
 # https://fastapi.tiangolo.com/tutorial/request-files/#define-file-parameters
