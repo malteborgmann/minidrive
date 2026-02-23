@@ -15,10 +15,10 @@
             </svg>
           </div>
           <h1>Minidrive</h1>
-          <p>Login to access your contacts</p>
+          <p>Register to get started</p>
         </div>
 
-        <form @submit.prevent="handleLogin" class="login-form">
+        <form @submit.prevent="handleRegister" class="login-form">
           <div class="input-group">
             <label for="username">Username</label>
             <div class="input-field">
@@ -40,13 +40,13 @@
           </div>
 
           <button type="submit" class="submit-btn" :class="{ 'loading': isLoading }" :disabled="isLoading">
-            <span v-if="!isLoading">Sign In</span>
+            <span v-if="!isLoading">Register Account</span>
             <span v-else class="loader"></span>
           </button>
         </form>
         
         <div class="card-footer">
-          Don't have an account? <router-link to="/register">Register here</router-link>
+          Already have an account? <router-link to="/login">Sign in here</router-link>
         </div>
       </div>
     </div>
@@ -68,30 +68,34 @@ const form = ref({
 const errorMsg = ref('');
 const isLoading = ref(false);
 
-const handleLogin = async () => {
+const handleRegister = async () => {
   errorMsg.value = '';
   isLoading.value = true;
   
   try {
-    // FastAPI expects application/x-www-form-urlencoded for OAuth2 /token login
+    // 1. Register the user
+    await api.post('/register', {
+      username: form.value.username,
+      password: form.value.password
+    });
+
+    // 2. Perform Login seamlessly
     const formData = new URLSearchParams();
     formData.append('username', form.value.username);
     formData.append('password', form.value.password);
 
-    const response = await api.post('/token', formData, {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      }
+    const loginResponse = await api.post('/token', formData, {
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
     });
 
-    // Save token and navigate
-    localStorage.setItem('token', response.data.access_token);
+    localStorage.setItem('token', loginResponse.data.access_token);
     router.push('/contacts');
   } catch (error) {
-    if (error.response && error.response.status === 401) {
-      errorMsg.value = 'Invalid username or password.';
+    if (error.response) {
+      const detail = error.response.data.detail;
+      errorMsg.value = Array.isArray(detail) ? detail[0].msg : (detail || 'An error occurred during registration.');
     } else {
-      errorMsg.value = 'An error occurred while trying to log in.';
+      errorMsg.value = 'A network error occurred.';
     }
   } finally {
     isLoading.value = false;
