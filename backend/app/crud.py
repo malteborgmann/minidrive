@@ -117,6 +117,7 @@ def create_contacts_from_vcard(
     created_contacts = []
     try:
         for contact in contacts:
+            print(contact)
             now = datetime.now(timezone.utc)
             db_contact = models.Contact(
                 first_name=contact.first_name,
@@ -129,8 +130,6 @@ def create_contacts_from_vcard(
                 owner_id=user_id,
             )
             db.add(db_contact)
-            db.commit()
-            db.refresh(db_contact)
 
             if contact.communications:
                 for comm in contact.communications:
@@ -142,7 +141,7 @@ def create_contacts_from_vcard(
                     )
                     db.add(db_comm)
 
-            created_contacts.append(db_contact)
+            created_contacts.append(contact.model_dump())
     except Exception:
         raise RuntimeError("Error creating contacts")
 
