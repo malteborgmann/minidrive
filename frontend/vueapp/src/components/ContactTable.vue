@@ -17,7 +17,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="contact in contacts" :key="contact.id">
+        <tr v-for="contact in contacts" :key="contact.id" @click="emit('row-click', contact)" class="clickable-row">
           <td class="name-col">
             <div class="name-inner">
               <div class="avatar">{{ contact.first_name.charAt(0) }}{{ contact.last_name.charAt(0) }}</div>
@@ -68,6 +68,8 @@ const props = defineProps({
     default: () => []
   }
 });
+
+const emit = defineEmits(['row-click']);
 
 // Helper functions to filter communications
 const getPhones = (comms) => comms.filter(c => c.comm_type === 'phone' || c.comm_type === 'tel' || c.comm_type === 'cell');
@@ -140,7 +142,7 @@ const formatLabel = (label) => {
 
 .contact-table tbody tr {
   transition: background 0.2s ease;
-  cursor: default;
+  cursor: pointer;
 }
 
 .contact-table tbody tr:hover {
