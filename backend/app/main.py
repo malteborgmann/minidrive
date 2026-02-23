@@ -1,6 +1,7 @@
 import os
 from typing import List
 
+import vobject
 from fastapi import Depends, FastAPI, File, HTTPException, UploadFile
 from sqlalchemy.orm import Session
 
@@ -69,12 +70,22 @@ def delete_contact_by_id(contact_id: int, db: Session = Depends(get_db)):
 @app.post("/files/")
 async def upload_file(file: UploadFile = File(...)):
     # Erst einmal nur lokal im Endpunkt verarbeiten, wie gewünscht
-    upload_dir = "uploads"
+
+    if file.content_type != "text/vcard":
+        raise HTTPException(status_code=400, detail="File must be VCF")
+
+    try:
+        content = await file.read()
+        vcard = vobject.readOne(content.decode("utf-8"))
+        print(vcard.validate())
+    except Exception:
+        raise HTTPException(status_code=400, detail="File is not a valid VCF")
+
+    upload_dir = "tmp/uploads"
     os.makedirs(upload_dir, exist_ok=True)
 
     file_path = os.path.join(upload_dir, file.filename)
     with open(file_path, "wb") as buffer:
-        content = await file.read()
         buffer.write(content)
 
     return {
